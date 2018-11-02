@@ -15,11 +15,7 @@ app.get('/api/dl/:youtubeUrl', (req, res) => {
         const writeStream = fs.createWriteStream(musicFile);
         youtubeStream(youtubeUrl).pipe(writeStream)
         musicId++
-        res.download('./' + musicFile, 'muse.mp3', (err) =>{
-            if (err){
-                console.log(err)
-            }
-        } )
+        res.download(__dirname + '/' + musicFile)
     } catch (exception) {
         console.log(exception)
         res.status(500).send(exception)
