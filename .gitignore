@@ -77,6 +77,6 @@ typings/
 
 .idea
 # End of https://www.gitignore.io/api/node
-temp
 .DS_STORE
- !.gitkeep
+temp/*
+!*/.gitkeep
