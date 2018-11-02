@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const fs = require('fs');  // file system
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 const HOST = 'localhost'
 const youtubeStream = require('youtube-audio-stream')
 // app.use(express.static('public'))
