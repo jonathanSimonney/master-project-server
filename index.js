@@ -4,7 +4,7 @@ const fs = require('fs');  // file system
 const PORT = process.env.PORT || 3000
 const HOST = 'localhost'
 const youtubeStream = require('youtube-audio-stream')
-// app.use(express.static('public'))
+app.use(express.static('temp'))
 musicId = 0
 
 app.get('/api/dl/:youtubeUrl', (req, res) => {
@@ -15,7 +15,11 @@ app.get('/api/dl/:youtubeUrl', (req, res) => {
         const writeStream = fs.createWriteStream(musicFile);
         youtubeStream(youtubeUrl).pipe(writeStream)
         musicId++
-        res.download(musicFile)
+        res.download('./' + musicFile, 'muse.mp3', (err) =>{
+            if (err){
+                console.log(err)
+            }
+        } )
     } catch (exception) {
         console.log(exception)
         res.status(500).send(exception)
