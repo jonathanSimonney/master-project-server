@@ -7,15 +7,14 @@ const youtubeStream = require('youtube-audio-stream')
 app.use(express.static('temp'))
 musicId = 0
 
-app.get('/api/dl/:youtubeUrl', (req, res) => {
-    youtubeUrl = req.params.youtubeUrl;
+app.get('/api/dl/:youtubeUrl/:filename',  (req, res) => {
+    const youtubeUrl = req.params.youtubeUrl;
+    const filename = req.params.filename;
     try {
-        const musicFile = 'temp/music' + musicId + '.mp3';
-        fs.closeSync(fs.openSync(musicFile, 'w'));
-        const writeStream = fs.createWriteStream(musicFile);
-        youtubeStream(youtubeUrl).pipe(writeStream)
-        musicId++
-        res.download(__dirname + '/' + musicFile)
+        youtubeStream(youtubeUrl).pipe(res)
+
+        res.setHeader('Content-disposition', 'attachment; filename=' + filename + ".mp3");
+        res.setHeader('Content-type', 'mp3');
     } catch (exception) {
         console.log(exception)
         res.status(500).send(exception)
