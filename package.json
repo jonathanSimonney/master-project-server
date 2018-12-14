@@ -12,6 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
+    "fs-extra": "^7.0.1",
+    "node-id3": "^0.1.7",
     "youtube-audio-stream": "^0.2.0"
   }
 }
