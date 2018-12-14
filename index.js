@@ -19,7 +19,7 @@ app.get('/api/dl/:youtubeUrl/:filename/:fileAuthor',  (req, res) => {
 
     const toBeDownloadedFile = fs.createWriteStream(toBeDownloadedFilePath);
     try {
-        let fileWriteStream = youtubeStream("https://youtu.be/Fna56a_r41s").pipe(toBeDownloadedFile)
+        let fileWriteStream = youtubeStream(youtubeUrl).pipe(toBeDownloadedFile)
 
         fileWriteStream.on('finish', () => {
             let tags = {
