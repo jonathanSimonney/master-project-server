@@ -11,10 +11,10 @@ const youtubeStream = require('youtube-audio-stream')
 app.use(express.static('temp'))
 let musicId = 0
 
-app.get('/api/:apiKey/dl/:youtubeUrl/:filename/:fileAuthor',  (req, res) => {
+app.get('/api/:apiKey/dl/:youtubeUrl/:filename/:fileAuthor',  async (req, res) => {
     musicId ++;
     // let toBeDownloadedFilePath = "musics/music" + musicId + ".mp3";
-    // const youtubeUrl = "https://youtu.be/SUthZHNsJ5k"
+    const youtubeUrl = "https://youtu.be/SUthZHNsJ5k"
     const paramApiKey = req.params.apiKey;
 
     if (paramApiKey !== API_KEY ){
@@ -22,9 +22,9 @@ app.get('/api/:apiKey/dl/:youtubeUrl/:filename/:fileAuthor',  (req, res) => {
         return;
     }
 
-    console.log(API_KEY, propApiKey)
+    console.log(API_KEY, paramApiKey)
 
-    const youtubeUrl = req.params.youtubeUrl;
+    // const youtubeUrl = req.params.youtubeUrl;
     const filename = req.params.filename;
     const fileAuthor = req.params.fileAuthor;
 
@@ -37,25 +37,42 @@ app.get('/api/:apiKey/dl/:youtubeUrl/:filename/:fileAuthor',  (req, res) => {
             artist: fileAuthor,
         }
 
-        let ID3FrameBuffer = NodeID3.create(tags)
+        // let ID3FrameBuffer = NodeID3.create(tags)
+        //
+        // let bufferStream = new stream.PassThrough();
+        // bufferStream.end( ID3FrameBuffer );
 
-        let bufferStream = new stream.PassThrough();
-        bufferStream.end( ID3FrameBuffer );
+        console.log("about to create stream")
+        // let combinedStream = CombinedStream.create();
+        //
+        // combinedStream.append(bufferStream)
+        // combinedStream.append(youtubeStream(youtubeUrl))
 
-        let combinedStream = CombinedStream.create();
 
-        combinedStream.append(bufferStream)
-        combinedStream.append(youtubeStream(youtubeUrl))
-
-        combinedStream.pipe(res)
+        console.log("about to pipe stuff in another stream")
 
         res.setHeader('Content-disposition', 'attachment; filename=' + filename + ".mp3");
         res.setHeader('Content-type', 'mp3');
+
+        console.log(youtubeUrl)
+        for await (const chunk of youtubeStream(youtubeUrl)) {
+            res.write(chunk)
+            console.log("another chunk written")
+            // combinedStream.append(chunk)
+        }
+        console.log("pipe went well")
+        res.end()
+
+        // console.log(res)
+
     } catch (exception) {
         console.log(exception)
         res.status(500).send(exception)
     }
 })
 
+app.get('/:debug',  (req, res) => {
+    console.log(req.params.debug)
+})
 
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))

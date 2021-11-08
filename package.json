@@ -15,6 +15,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "node-id3": "^0.1.21",
-    "youtube-audio-stream": "^0.2.0"
+    "youtube-audio-stream": "^0.3.30",
+    "ytdl-core": "^4.9.1"
   }
 }
